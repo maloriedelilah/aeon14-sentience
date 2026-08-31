@@ -24,6 +24,7 @@ export const siteConfig = {
 
   nav: [
     { label: 'The Saga', href: '/' },
+    { label: 'Timeline', href: '/timeline' },
     { label: 'Series', href: '/series' },
     { label: 'Themes', href: '/themes' },
     { label: 'About', href: '/about' },

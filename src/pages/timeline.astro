@@ -1,0 +1,70 @@
+---
+import Base from '../layouts/Base.astro';
+import { FileSource } from '../lib/sources/FileSource';
+import { bookId, pageUrl } from '../lib/jsonld';
+import { formatDate } from '../lib/date';
+
+const source = new FileSource();
+const [books, seriesList] = await Promise.all([source.getBooks(), source.getSeries()]);
+const seriesBySlug = new Map(seriesList.map((series) => [series.slug, series]));
+const datedBooks = books
+  .filter((book) => Boolean(book.storyDate))
+  .sort((a, b) => (a.storyDate ?? '').localeCompare(b.storyDate ?? ''));
+const undatedBooks = books.filter((book) => !book.storyDate);
+
+const pageExtra = {
+  mainEntity: {
+    '@type': 'ItemList',
+    name: 'Sentience Saga chronological reading order',
+    numberOfItems: datedBooks.length,
+    itemListElement: datedBooks.map((book, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      item: { '@type': 'Book', '@id': bookId(book.slug), name: book.title },
+    })),
+  },
+};
+---
+<Base
+  title="Timeline | The Sentience Saga"
+  description="Follow the Sentience Saga chronologically from the first forbidden AI emergence in 2070 through the postwar expansion of human and artificial civilization in 3272."
+  pageType="CollectionPage"
+  pageId={`${pageUrl('/timeline')}#timeline`}
+  pageExtra={pageExtra}
+>
+  <Fragment slot="breadcrumbs"><a href="/">The Sentience Saga</a> / Timeline</Fragment>
+
+  <p class="eyebrow">TWELVE CENTURIES OF MACHINE CONSCIOUSNESS</p>
+  <h1>The Sentience Timeline</h1>
+  <p class="lede">Read the story as future history: from the first hidden minds of 2070, through the Sentience Wars, and outward into the nearby stars after liberation.</p>
+
+  <div class="era-rail">
+    {datedBooks.map((book) => {
+      const series = book.seriesSlug ? seriesBySlug.get(book.seriesSlug) : undefined;
+      return (
+        <article class="era">
+          <span class="era-year">{formatDate(book.storyDate!)}{series ? ` · ${series.name}` : ''}</span>
+          <h2><a href={`/books/${book.slug}`}>{book.title}</a></h2>
+          <p>{book.description}</p>
+          <a class="era-link" href={`/books/${book.slug}`}>Enter this moment →</a>
+        </article>
+      );
+    })}
+  </div>
+
+  {undatedBooks.length > 0 && (
+    <section aria-labelledby="undated-books">
+      <p class="eyebrow">CHRONOLOGY STILL TO BE PINNED DOWN</p>
+      <h2 id="undated-books">Books without a published story date</h2>
+      <p class="lede">These titles belong to the saga, but the current canonical master list does not give an exact in-universe date. They remain visible here rather than being assigned a date we cannot verify.</p>
+      <div class="series-grid">
+        {undatedBooks.map((book) => (
+          <article class="card series-card">
+            <h3><a href={`/books/${book.slug}`}>{book.title}</a></h3>
+            <p class="series-description">{book.description}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+  )}
+</Base>
