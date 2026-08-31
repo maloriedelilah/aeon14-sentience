@@ -2,6 +2,7 @@
 title: "Lyssa's Betrayal"
 slug: "lyssas-betrayal"
 description: "Mars and Terra are engaged across the battlespace, Jove is preparing to enter the conflict, and a new power is rising as the Sentience Wars expand beyond the struggle any one faction can control."
+cover: "https://sentience.aeon14.com/covers/lyssas-betrayal.webp"
 authors: ["md-cooper", "james-s-aaron"]
 series: "sentience-wars"
 seriesPosition: 11
