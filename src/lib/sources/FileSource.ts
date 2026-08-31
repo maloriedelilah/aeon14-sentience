@@ -15,7 +15,7 @@ async function mapBook(entry: Awaited<ReturnType<typeof getCollection<'books'>>>
   return {
     title: d.title, subtitle: d.subtitle, slug: d.slug, description: d.description,
     cover: d.cover ? (typeof d.cover === 'string' ? d.cover : d.cover.src) : undefined,
-    datePublished: d.datePublished, language: d.language, genres: d.genres,
+    datePublished: d.datePublished, storyDate: d.storyDate, language: d.language, genres: d.genres,
     editions: d.editions, comps: d.comps,
     authorSlugs: d.authors.map((a) => a.id), seriesSlug: d.series?.id,
     seriesPosition: d.seriesPosition,
