@@ -10,13 +10,6 @@ datePublished: "2026-05"
 storyDate: "2070-03-30"
 language: "en"
 genres: ["Science Fiction", "Near-Future Science Fiction", "Hard Science Fiction", "Artificial Intelligence", "AI Sentience", "Full-Dive Virtual Reality", "Transhumanism"]
-editions:
-  - format: "ebook"
-    retailer: "Aeon14.com"
-    url: "https://www.aeon14.com/product-page/the-tide-that-swallowed-the-world-may-14th"
-    price: "5.99"
-    currency: "USD"
-    sku: "the-tide-that-swallowed-the-world-may-14th"
 ---
 
 A standalone-friendly chronological entry point into Aeon 14, where the first forbidden signs of machine consciousness emerge inside a system built to treat every intelligence as code.
