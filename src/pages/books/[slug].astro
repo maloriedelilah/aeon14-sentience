@@ -23,13 +23,21 @@ const breadcrumbs = breadcrumbNode([
 ]);
 const firstIsbn = book.editions.find((e) => e.isbn)?.isbn;
 ---
-<Base title={`${book.title} | The Sentience Saga`} description={book.description} image={book.cover} imageAlt={`Cover of ${book.title}`} type="book" bookIsbn={firstIsbn} bookReleaseDate={book.datePublished}>
+<Base title={`${book.title} | The Sentience Saga`} description={book.description} image={book.cover} imageAlt={book.cover ? `Cover of ${book.title}` : undefined} type="book" bookIsbn={firstIsbn} bookReleaseDate={book.datePublished}>
   <Fragment slot="breadcrumbs"><a href="/">The Sentience Saga</a> / {series && <><a href={`/series/${series.slug}`}>{series.name}</a> / </>}{book.title}</Fragment>
   <JsonLd graph={graph([bookNode(book, { series: series ? { slug: series.slug, name: series.name } : undefined, authors: bookAuthors.map((a) => ({ slug: a.slug, name: a.name })), hubs: bookHubs.map((h) => ({ slug: h.slug, name: h.name })) }), breadcrumbs])} />
 
   <article class="book-card">
     <div>
-      <img class="cover" src={book.cover} alt={`Cover of ${book.title}`} />
+      {book.cover ? (
+        <img class="cover" src={book.cover} alt={`Cover of ${book.title}`} />
+      ) : (
+        <div class="cover cover-placeholder" role="img" aria-label={`Cover artwork for ${book.title} pending`}>
+          <span class="cover-placeholder-mark">A14</span>
+          <strong>{book.title}</strong>
+          <span>Cover artwork pending</span>
+        </div>
+      )}
       <p class="release-date">{isFutureRelease(book.datePublished) ? 'Releases' : 'Published'} {formatDate(book.datePublished)}</p>
     </div>
     <div class="book-card-body">
