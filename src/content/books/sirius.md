@@ -6,6 +6,7 @@ cover: "https://static.wixstatic.com/media/fc701e_dac01f6a9ae7445badf68bfafc8a91
 authors: ["md-cooper", "ll-richman"]
 series: "enfield-genesis"
 seriesPosition: 5
+datePublished: "2019"
 storyDate: "3272-05-01"
 language: "en"
 genres: ["Science Fiction", "Space Opera", "Artificial Intelligence", "AI Rights", "Human-AI Partnership", "Military Science Fiction"]
