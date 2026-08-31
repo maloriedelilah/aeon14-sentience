@@ -19,11 +19,12 @@ interface Props {
   bookReleaseDate?: string;
   pageType?: string;
   pageId?: string;
+  pageName?: string;
   pageExtra?: Record<string, unknown>;
 }
 const {
   title, description, image, imageAlt, type = 'website', bookIsbn, bookReleaseDate,
-  pageType = 'WebPage', pageId, pageExtra,
+  pageType = 'WebPage', pageId, pageName, pageExtra,
 } = Astro.props as Props;
 
 const source = new FileSource();
@@ -44,7 +45,7 @@ const siteGraph = {
       publisher: namedStub(authorId(primaryAuthor.slug), primaryAuthor.name),
     },
     {
-      '@type': pageType, '@id': resolvedPageId, url: Astro.url.toString(), name: title,
+      '@type': pageType, '@id': resolvedPageId, url: Astro.url.toString(), name: pageName ?? title,
       ...(description ? { description } : {}),
       isPartOf: namedStub(websiteId, 'The Sentience Saga', 'WebSite'),
       ...(pageExtra ?? {}),
