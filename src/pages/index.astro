@@ -83,11 +83,14 @@ const entryPoints = [
       {entryPoints.map(({ book, choice, copy, cta, slug }) => (
         <article class="card start-card">
           {book?.cover ? (
-            <a class="start-cover-link" href={`/books/${slug}`} aria-label={`Open ${book.title}`}>
-              <img class="start-cover" src={book.cover} alt={`Cover of ${book.title}`} loading="lazy" />
+            <a href={`/books/${slug}`} aria-label={`Open ${book.title}`}>
+              <img class="cover" src={book.cover} alt={`Cover of ${book.title}`} loading="lazy" />
             </a>
           ) : (
-            <div class="start-cover start-cover-placeholder" aria-hidden="true"><span>A14</span></div>
+            <div class="cover-placeholder" aria-hidden="true">
+              <span class="cover-placeholder-mark">A14</span>
+              <strong>{book?.title ?? slug}</strong>
+            </div>
           )}
           <div class="start-card-body">
             <span class="choice">{choice}</span>
