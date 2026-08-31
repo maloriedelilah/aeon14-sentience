@@ -6,6 +6,7 @@ cover: "https://static.wixstatic.com/media/fc701e_3ec75467859d46ef8ed955f58988a0
 authors: ["md-cooper", "james-s-aaron"]
 series: "sentience-wars"
 seriesPosition: 9
+datePublished: "2021"
 language: "en"
 genres: ["Science Fiction", "Hard Science Fiction", "Space Opera", "Artificial Intelligence", "AI Rights", "Space Fleet Warfare"]
 ---
