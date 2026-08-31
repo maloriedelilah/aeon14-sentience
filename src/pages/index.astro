@@ -3,8 +3,9 @@ import Base from '../layouts/Base.astro';
 import { FileSource } from '../lib/sources/FileSource';
 
 const source = new FileSource();
-const [seriesList, hubs] = await Promise.all([source.getSeries(), source.getHubs()]);
+const [seriesList, hubs, books] = await Promise.all([source.getSeries(), source.getHubs(), source.getBooks()]);
 const seriesBySlug = new Map(seriesList.map((s) => [s.slug, s]));
+const booksBySlug = new Map(books.map((book) => [book.slug, book]));
 
 const eras = [
   {
@@ -23,6 +24,27 @@ const eras = [
     copy: 'The war is over, but its consequences have followed humanity outward. AI refugees flee Sol, old prejudices take new forms, and the struggle for personhood spreads from star to star.',
   },
 ];
+
+const entryPoints = [
+  {
+    slug: 'the-tide-that-swallowed-the-world',
+    choice: 'I want to see it begin',
+    copy: 'Near-future science fiction at the beginning of the chronology, where machine consciousness first crosses a line humanity tried to outlaw.',
+    cta: 'Begin in 2070',
+  },
+  {
+    slug: 'lyssas-dream',
+    choice: 'Give me the epic AI space opera',
+    copy: 'An illegal AI, a battered cargo ship, a found family, and the spark of a struggle over whether an artificial person can ever be property.',
+    cta: 'Begin in 2981',
+  },
+  {
+    slug: 'alpha-centauri',
+    choice: 'Take me straight to the stars',
+    copy: 'The Sentience Wars are over. Refugees are leaving Sol. Freedom, exploitation, and human–AI partnership now collide in the nearby stars.',
+    cta: 'Begin in 3189',
+  },
+].map((entry) => ({ ...entry, book: booksBySlug.get(entry.slug) }));
 ---
 <Base title="The Sentience Saga | Aeon 14" description="Twelve centuries of AI emergence, personhood, liberation, and freedom across The Sentience Gradient, Sentience Wars, and Enfield Genesis by M. D. Cooper.">
   <section class="saga-hero">
@@ -58,24 +80,23 @@ const eras = [
     <p class="eyebrow">WHERE DO YOU WANT TO ENTER?</p>
     <h2 id="where-start">Choose the story you want first.</h2>
     <div class="start-grid">
-      <article class="card start-card">
-        <span class="choice">I want to see it begin</span>
-        <h3>The Tide That Swallowed the World</h3>
-        <p>Near-future science fiction at the beginning of the chronology, where machine consciousness first crosses a line humanity tried to outlaw.</p>
-        <a class="button" href="/books/the-tide-that-swallowed-the-world">Begin in 2070</a>
-      </article>
-      <article class="card start-card">
-        <span class="choice">Give me the epic AI space opera</span>
-        <h3>Lyssa's Dream</h3>
-        <p>An illegal AI, a battered cargo ship, a found family, and the spark of a struggle over whether an artificial person can ever be property.</p>
-        <a class="button" href="/books/lyssas-dream">Begin in 2981</a>
-      </article>
-      <article class="card start-card">
-        <span class="choice">Take me straight to the stars</span>
-        <h3>Alpha Centauri</h3>
-        <p>The Sentience Wars are over. Refugees are leaving Sol. Freedom, exploitation, and human–AI partnership now collide in the nearby stars.</p>
-        <a class="button" href="/books/alpha-centauri">Begin in 3189</a>
-      </article>
+      {entryPoints.map(({ book, choice, copy, cta, slug }) => (
+        <article class="card start-card">
+          {book?.cover ? (
+            <a class="start-cover-link" href={`/books/${slug}`} aria-label={`Open ${book.title}`}>
+              <img class="start-cover" src={book.cover} alt={`Cover of ${book.title}`} loading="lazy" />
+            </a>
+          ) : (
+            <div class="start-cover start-cover-placeholder" aria-hidden="true"><span>A14</span></div>
+          )}
+          <div class="start-card-body">
+            <span class="choice">{choice}</span>
+            <h3>{book?.title ?? slug}</h3>
+            <p>{copy}</p>
+            <a class="button" href={`/books/${slug}`}>{cta}</a>
+          </div>
+        </article>
+      ))}
     </div>
   </section>
 
