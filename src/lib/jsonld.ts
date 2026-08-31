@@ -35,23 +35,26 @@ export function bookNode(
     ...(opts.hubs ?? []).map((h) => namedStub(hubId(h.slug), h.name, 'CollectionPage')),
   ];
   const availabilityStarts = exactPublicationDate(b.datePublished);
+  const workExamples = b.editions.map((e) => ({ '@type': 'Book', bookFormat: e.format,
+    isbn: e.isbn, potentialAction: undefined,
+    offers: { '@type': 'Offer', url: e.url, price: e.price, priceCurrency: e.currency,
+      ...(e.asin ? { asin: e.asin } : {}),
+      ...(e.sku ? { sku: e.sku } : {}),
+      availability: isFutureRelease(b.datePublished)
+        ? 'https://schema.org/PreOrder' : 'https://schema.org/InStock',
+      ...(isFutureRelease(b.datePublished) && availabilityStarts
+        ? { availabilityStarts } : {}) } }));
   return { '@type': 'Book', '@id': bookId(b.slug), name: b.title,
     url: pageUrl(`/books/${b.slug}`),
     ...(b.subtitle ? { alternateName: b.subtitle } : {}),
     author: opts.authors.map((a) => namedStub(authorId(a.slug), a.name)),
     description: b.description,
-    inLanguage: b.language, datePublished: b.datePublished,
-    genre: b.genres, ...(b.cover ? { image: absImage(b.cover) } : {}),
+    inLanguage: b.language,
+    ...(b.datePublished ? { datePublished: b.datePublished } : {}),
+    genre: b.genres,
+    ...(b.cover ? { image: absImage(b.cover) } : {}),
     ...(isPartOf.length > 0 ? { isPartOf } : {}),
-    workExample: b.editions.map((e) => ({ '@type': 'Book', bookFormat: e.format,
-      isbn: e.isbn, potentialAction: undefined,
-      offers: { '@type': 'Offer', url: e.url, price: e.price, priceCurrency: e.currency,
-        ...(e.asin ? { asin: e.asin } : {}),
-        ...(e.sku ? { sku: e.sku } : {}),
-        availability: isFutureRelease(b.datePublished)
-          ? 'https://schema.org/PreOrder' : 'https://schema.org/InStock',
-        ...(isFutureRelease(b.datePublished) && availabilityStarts
-          ? { availabilityStarts } : {}) } })) };
+    ...(workExamples.length > 0 ? { workExample: workExamples } : {}) };
 }
 
 export function seriesNode(
