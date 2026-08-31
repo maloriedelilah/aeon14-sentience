@@ -6,6 +6,7 @@ cover: "https://static.wixstatic.com/media/fc701e_92f700046a9f403f8b123ae171fb05
 authors: ["md-cooper", "ll-richman"]
 series: "enfield-genesis"
 seriesPosition: 3
+datePublished: "2018"
 storyDate: "3192-03-01"
 language: "en"
 genres: ["Science Fiction", "Space Opera", "Artificial Intelligence", "AI Rights", "AI Trafficking", "Nanotechnology"]
