@@ -1,11 +1,11 @@
 // Builds schema.org JSON-LD as ONE @graph with stable @ids so entities cross-reference
 // instead of duplicating. Derived from ContentSource -> can't drift from visible content.
 import type { Author, Book, Series, Hub, EventItem } from './ContentSource';
-import { isFutureRelease } from './date';
+import { exactPublicationDate, isFutureRelease } from './date';
 
 const SITE = (path = '') => new URL(path, import.meta.env.SITE).toString();
 export const pageUrl = (path: string) => SITE(path.endsWith('/') ? path : `${path}/`);
-const absImage = (src?: string) => (src ? SITE(src) : undefined);
+const absImage = (src?: string) => (src ? new URL(src, import.meta.env.SITE).toString() : undefined);
 
 export const authorId = (slug: string) => `${pageUrl('/about')}#${slug}`;
 export const bookId = (slug: string) => `${pageUrl(`/books/${slug}`)}#book`;
@@ -34,13 +34,14 @@ export function bookNode(
     ...(opts.series ? [namedStub(seriesId(opts.series.slug), opts.series.name, 'BookSeries')] : []),
     ...(opts.hubs ?? []).map((h) => namedStub(hubId(h.slug), h.name, 'CollectionPage')),
   ];
+  const availabilityStarts = exactPublicationDate(b.datePublished);
   return { '@type': 'Book', '@id': bookId(b.slug), name: b.title,
     url: pageUrl(`/books/${b.slug}`),
     ...(b.subtitle ? { alternateName: b.subtitle } : {}),
     author: opts.authors.map((a) => namedStub(authorId(a.slug), a.name)),
     description: b.description,
-    inLanguage: b.language, datePublished: b.datePublished.toISOString().slice(0, 10),
-    genre: b.genres, image: absImage(b.cover),
+    inLanguage: b.language, datePublished: b.datePublished,
+    genre: b.genres, ...(b.cover ? { image: absImage(b.cover) } : {}),
     ...(isPartOf.length > 0 ? { isPartOf } : {}),
     workExample: b.editions.map((e) => ({ '@type': 'Book', bookFormat: e.format,
       isbn: e.isbn, potentialAction: undefined,
@@ -49,8 +50,8 @@ export function bookNode(
         ...(e.sku ? { sku: e.sku } : {}),
         availability: isFutureRelease(b.datePublished)
           ? 'https://schema.org/PreOrder' : 'https://schema.org/InStock',
-        ...(isFutureRelease(b.datePublished)
-          ? { availabilityStarts: b.datePublished.toISOString().slice(0, 10) } : {}) } })) };
+        ...(isFutureRelease(b.datePublished) && availabilityStarts
+          ? { availabilityStarts } : {}) } })) };
 }
 
 export function seriesNode(
