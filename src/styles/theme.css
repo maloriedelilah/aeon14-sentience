@@ -1,0 +1,27 @@
+/* author-geo THEME TOKENS -- implementer-owned. */
+
+:root {
+  --font-heading: Georgia, "Iowan Old Style", "Times New Roman", serif;
+}
+
+:root[data-theme="dark"] {
+  --bg: #071018;
+  --bg-elevated: #101d29;
+  --text: #eef8fb;
+  --text-muted: #9db3bd;
+  --accent: #59e1f7;
+  --accent-contrast: #021216;
+  --border: #24404d;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.42);
+}
+
+:root[data-theme="light"] {
+  --bg: #f7fbfc;
+  --bg-elevated: #ffffff;
+  --text: #15232a;
+  --text-muted: #5b6d76;
+  --accent: #087f9a;
+  --accent-contrast: #ffffff;
+  --border: #d5e4e8;
+  --shadow: 0 8px 24px rgba(20, 40, 48, 0.1);
+}
