@@ -5,6 +5,7 @@ description: "After decades of failed diplomacy with the Psion AIs on Ceres, Lys
 authors: ["md-cooper", "james-s-aaron"]
 series: "sentience-wars"
 seriesPosition: 6
+datePublished: "2018"
 language: "en"
 genres: ["Science Fiction", "Hard Science Fiction", "Space Opera", "Artificial Intelligence", "AI Rights", "Galactic War"]
 ---
