@@ -23,6 +23,7 @@ const breadcrumbs = breadcrumbNode([
 ]);
 const firstIsbn = book.editions.find((e) => e.isbn)?.isbn;
 const releaseLabel = formatDate(book.datePublished);
+const storyLabel = formatDate(book.storyDate);
 const preorder = isFutureRelease(book.datePublished);
 ---
 <Base title={`${book.title} | The Sentience Saga`} description={book.description} image={book.cover} imageAlt={book.cover ? `Cover of ${book.title}` : undefined} type="book" bookIsbn={firstIsbn} bookReleaseDate={book.datePublished}>
@@ -40,6 +41,7 @@ const preorder = isFutureRelease(book.datePublished);
           <span>Cover artwork pending</span>
         </div>
       )}
+      {storyLabel && <p class="story-date"><span>STORY DATE</span> {storyLabel}</p>}
       {releaseLabel && <p class="release-date">{preorder ? 'Releases' : 'Published'} {releaseLabel}</p>}
     </div>
     <div class="book-card-body">
