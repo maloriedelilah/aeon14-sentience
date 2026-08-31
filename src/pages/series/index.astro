@@ -4,6 +4,11 @@ import { FileSource } from '../../lib/sources/FileSource';
 const source = new FileSource();
 const [seriesList, books] = await Promise.all([source.getSeries(), source.getBooks()]);
 const order = ['sentience-gradient', 'sentience-wars', 'enfield-genesis'];
+const eraLabels = new Map([
+  ['sentience-gradient', '2070 · EMERGENCE'],
+  ['sentience-wars', '2981 · LIBERATION'],
+  ['enfield-genesis', '3189 · FREEDOM'],
+]);
 seriesList.sort((a,b) => order.indexOf(a.slug) - order.indexOf(b.slug));
 ---
 <Base title="The Three Eras | The Sentience Saga" description="Explore The Sentience Gradient, Sentience Wars, and Enfield Genesis — three eras in the history of machine consciousness in Aeon 14.">
@@ -13,8 +18,19 @@ seriesList.sort((a,b) => order.indexOf(a.slug) - order.indexOf(b.slug));
   <p class="lede">From the first illegal emergence to a war for personhood and the spread of AI freedom into the stars, these series form one widening history.</p>
   <div class="series-grid">
     {seriesList.map((series) => {
-      const count = books.filter((b) => b.seriesSlug === series.slug).length;
+      const members = books
+        .filter((book) => book.seriesSlug === series.slug)
+        .sort((a, b) => (a.seriesPosition ?? 999) - (b.seriesPosition ?? 999));
+      const count = members.length;
+      const representative = members.find((book) => book.seriesPosition === 1 && book.cover)
+        ?? members.find((book) => Boolean(book.cover));
       return <article class="card series-card">
+        {representative?.cover && (
+          <a href={`/series/${series.slug}`} aria-label={`Explore ${series.name}`}>
+            <img class="cover" src={representative.cover} alt={`Cover of ${representative.title}`} loading="lazy" />
+          </a>
+        )}
+        <p class="book-number">{eraLabels.get(series.slug)}</p>
         <h2><a href={`/series/${series.slug}`}>{series.name}</a></h2>
         <p class="series-description">{series.description}</p>
         {count > 0 && <p class="book-number">{count} {count === 1 ? 'book' : 'books'} currently catalogued</p>}
