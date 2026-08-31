@@ -16,7 +16,7 @@ interface Props {
   imageAlt?: string;
   type?: 'website' | 'book' | 'profile';
   bookIsbn?: string;
-  bookReleaseDate?: Date;
+  bookReleaseDate?: string;
   pageType?: string;
   pageId?: string;
   pageExtra?: Record<string, unknown>;
@@ -68,7 +68,7 @@ const siteGraph = {
     {ogImage && <meta property="og:image" content={ogImage} />}
     {ogImage && resolvedImageAlt && <meta property="og:image:alt" content={resolvedImageAlt} />}
     {type === 'book' && bookIsbn && <meta property="book:isbn" content={bookIsbn} />}
-    {type === 'book' && bookReleaseDate && <meta property="book:release_date" content={bookReleaseDate.toISOString().slice(0, 10)} />}
+    {type === 'book' && bookReleaseDate && <meta property="book:release_date" content={bookReleaseDate} />}
     <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
     <meta name="twitter:title" content={title} />
     {description && <meta name="twitter:description" content={description} />}
