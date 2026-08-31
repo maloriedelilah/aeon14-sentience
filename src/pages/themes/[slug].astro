@@ -34,7 +34,17 @@ const breadcrumbs = breadcrumbNode([
     <h2 id="books-in-theme">Books exploring this idea</h2>
     <div class="book-grid">
       {members.map((book) => <article class="card">
-        <a href={`/books/${book.slug}`}><img class="cover" src={book.cover} alt={`Cover of ${book.title}`} /></a>
+        <a href={`/books/${book.slug}`} aria-label={`Open ${book.title}`}>
+          {book.cover ? (
+            <img class="cover" src={book.cover} alt={`Cover of ${book.title}`} />
+          ) : (
+            <div class="cover cover-placeholder" role="img" aria-label={`Cover artwork for ${book.title} pending`}>
+              <span class="cover-placeholder-mark">A14</span>
+              <strong>{book.title}</strong>
+            </div>
+          )}
+        </a>
+        {book.storyDate && <p class="book-number">Story date · {book.storyDate}</p>}
         <h3><a href={`/books/${book.slug}`}>{book.title}</a></h3>
         <p class="book-blurb">{book.description}</p>
       </article>)}
