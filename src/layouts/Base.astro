@@ -1,0 +1,88 @@
+---
+import JsonLd from '../components/JsonLd.astro';
+import Header from '@theme/components/Header.astro';
+import Footer from '@theme/components/Footer.astro';
+import { authorId, namedStub, pageUrl } from '../lib/jsonld';
+import { FileSource } from '../lib/sources/FileSource';
+import { siteConfig } from '../config';
+import '../styles/base.css';
+import '../styles/theme.css';
+import '@theme-styles/site.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  imageAlt?: string;
+  type?: 'website' | 'book' | 'profile';
+  bookIsbn?: string;
+  bookReleaseDate?: Date;
+  pageType?: string;
+  pageId?: string;
+  pageExtra?: Record<string, unknown>;
+}
+const {
+  title, description, image, imageAlt, type = 'website', bookIsbn, bookReleaseDate,
+  pageType = 'WebPage', pageId, pageExtra,
+} = Astro.props as Props;
+
+const source = new FileSource();
+const authors = await source.getAuthors();
+const primaryAuthor = authors.find((a) => a.slug === 'md-cooper') ?? authors[0];
+if (!primaryAuthor) throw new Error('No author entry found in src/content/author');
+
+const ogImageSrc = image ?? primaryAuthor.photo;
+const ogImage = ogImageSrc ? new URL(ogImageSrc, Astro.site).toString() : undefined;
+const resolvedImageAlt = image ? (imageAlt ?? 'Cover image') : (primaryAuthor.photo ? `Photo of ${primaryAuthor.name}` : undefined);
+const websiteId = new URL('#website', Astro.site).toString();
+const resolvedPageId = pageId ?? new URL('#webpage', Astro.url).toString();
+const siteGraph = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebSite', '@id': websiteId, url: pageUrl('/'), name: 'The Sentience Saga',
+      publisher: namedStub(authorId(primaryAuthor.slug), primaryAuthor.name),
+    },
+    {
+      '@type': pageType, '@id': resolvedPageId, url: Astro.url.toString(), name: title,
+      ...(description ? { description } : {}),
+      isPartOf: namedStub(websiteId, 'The Sentience Saga', 'WebSite'),
+      ...(pageExtra ?? {}),
+    },
+  ],
+};
+---
+<!doctype html>
+<html lang="en" data-theme={siteConfig.theme.mode}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    {description && <meta name="description" content={description} />}
+    <link rel="canonical" href={Astro.url.toString()} />
+    <meta property="og:type" content={type === 'book' ? 'book' : type === 'profile' ? 'profile' : 'website'} />
+    <meta property="og:title" content={title} />
+    {description && <meta property="og:description" content={description} />}
+    <meta property="og:url" content={Astro.url.toString()} />
+    <meta property="og:site_name" content="The Sentience Saga" />
+    {ogImage && <meta property="og:image" content={ogImage} />}
+    {ogImage && resolvedImageAlt && <meta property="og:image:alt" content={resolvedImageAlt} />}
+    {type === 'book' && bookIsbn && <meta property="book:isbn" content={bookIsbn} />}
+    {type === 'book' && bookReleaseDate && <meta property="book:release_date" content={bookReleaseDate.toISOString().slice(0, 10)} />}
+    <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
+    <meta name="twitter:title" content={title} />
+    {description && <meta name="twitter:description" content={description} />}
+    {ogImage && <meta name="twitter:image" content={ogImage} />}
+    {ogImage && resolvedImageAlt && <meta name="twitter:image:alt" content={resolvedImageAlt} />}
+    <JsonLd graph={siteGraph} />
+    {siteConfig.theme.accent && <style set:html={`:root[data-theme="${siteConfig.theme.mode}"] { --accent: ${siteConfig.theme.accent}; }`} />}
+  </head>
+  <body>
+    <div class="site-shell">
+      <Header authorName={primaryAuthor.name} />
+      <nav class="breadcrumbs" aria-label="breadcrumbs"><div class="wrap"><slot name="breadcrumbs" /></div></nav>
+      <main class="wrap"><slot /></main>
+      <Footer authorName={primaryAuthor.name} sameAs={primaryAuthor.sameAs} />
+    </div>
+  </body>
+</html>

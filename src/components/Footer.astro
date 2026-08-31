@@ -1,0 +1,17 @@
+---
+import { siteConfig } from '../config';
+interface Props { authorName: string; sameAs?: string[]; }
+const { authorName, sameAs = [] } = Astro.props as Props;
+const year = new Date().getFullYear();
+function hostLabel(url: string) { try { return new URL(url).hostname.replace(/^www\./, ''); } catch { return url; } }
+---
+<footer class="site-footer">
+  <div class="wrap">
+    {siteConfig.footer.tagline && <p class="tagline">{siteConfig.footer.tagline}</p>}
+    <ul class="footer-links"><li><a href="https://www.aeon14.com">Explore all of Aeon 14</a></li></ul>
+    {sameAs.length > 0 && <ul class="footer-social" aria-label={`${authorName} elsewhere`}>
+      {sameAs.map((url) => <li><a href={url} target="_blank" rel="noopener noreferrer">{hostLabel(url)}</a></li>)}
+    </ul>}
+    <p class="copyright">&copy; {year} {authorName}. All rights reserved.</p>
+  </div>
+</footer>

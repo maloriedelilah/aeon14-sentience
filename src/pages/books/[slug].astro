@@ -1,0 +1,56 @@
+---
+import Base from '../../layouts/Base.astro';
+import JsonLd from '../../components/JsonLd.astro';
+import { FileSource } from '../../lib/sources/FileSource';
+import { bookNode, breadcrumbNode, graph, pageUrl } from '../../lib/jsonld';
+import { formatDate, isFutureRelease } from '../../lib/date';
+
+export async function getStaticPaths() {
+  const source = new FileSource();
+  return (await source.getBooks()).map((book) => ({ params: { slug: book.slug }, props: { book } }));
+}
+
+const { book } = Astro.props;
+const source = new FileSource();
+const [authors, seriesList, hubs] = await Promise.all([source.getAuthors(), source.getSeries(), source.getHubs()]);
+const bookAuthors = authors.filter((a) => book.authorSlugs.includes(a.slug));
+const series = book.seriesSlug ? seriesList.find((s) => s.slug === book.seriesSlug) : undefined;
+const bookHubs = hubs.filter((h) => h.bookSlugs.includes(book.slug));
+const breadcrumbs = breadcrumbNode([
+  { name: 'The Sentience Saga', url: pageUrl('/') },
+  ...(series ? [{ name: series.name, url: pageUrl(`/series/${series.slug}`) }] : []),
+  { name: book.title },
+]);
+const firstIsbn = book.editions.find((e) => e.isbn)?.isbn;
+---
+<Base title={`${book.title} | The Sentience Saga`} description={book.description} image={book.cover} imageAlt={`Cover of ${book.title}`} type="book" bookIsbn={firstIsbn} bookReleaseDate={book.datePublished}>
+  <Fragment slot="breadcrumbs"><a href="/">The Sentience Saga</a> / {series && <><a href={`/series/${series.slug}`}>{series.name}</a> / </>}{book.title}</Fragment>
+  <JsonLd graph={graph([bookNode(book, { series: series ? { slug: series.slug, name: series.name } : undefined, authors: bookAuthors.map((a) => ({ slug: a.slug, name: a.name })), hubs: bookHubs.map((h) => ({ slug: h.slug, name: h.name })) }), breadcrumbs])} />
+
+  <article class="book-card">
+    <div>
+      <img class="cover" src={book.cover} alt={`Cover of ${book.title}`} />
+      <p class="release-date">{isFutureRelease(book.datePublished) ? 'Releases' : 'Published'} {formatDate(book.datePublished)}</p>
+    </div>
+    <div class="book-card-body">
+      {series && <p class="eyebrow">{series.name}{book.seriesPosition != null ? ` · ${book.seriesPosition === 0 ? 'PREQUEL' : `BOOK ${book.seriesPosition}`}` : ''}</p>}
+      <h1>{book.title}{isFutureRelease(book.datePublished) && <span class="preorder-badge">Pre-order</span>}</h1>
+      {book.subtitle && <p class="subtitle">{book.subtitle}</p>}
+      <p class="byline">By {bookAuthors.map((a) => a.name).join(' & ')}</p>
+      <p>{book.description}</p>
+
+      <section class="get-book-section" aria-labelledby="get-book">
+        <h2 id="get-book">{isFutureRelease(book.datePublished) ? 'Pre-order' : 'Get the book'}</h2>
+        <ul class="editions">
+          {book.editions.map((edition) => <li><a class="buy-button" href={edition.url} target="_blank" rel="noopener noreferrer">{edition.retailer} · {edition.format}</a></li>)}
+        </ul>
+      </section>
+    </div>
+  </article>
+
+  {bookHubs.length > 0 && <section class="hubs-section">
+    <p class="eyebrow">FOLLOW THE IDEAS</p>
+    <h2>Featured themes</h2>
+    <div class="theme-cloud">{bookHubs.map((hub) => <a class="theme-pill" href={`/themes/${hub.slug}`}>{hub.name}</a>)}</div>
+  </section>}
+</Base>

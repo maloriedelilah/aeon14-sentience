@@ -1,0 +1,47 @@
+---
+import Base from '../../layouts/Base.astro';
+import JsonLd from '../../components/JsonLd.astro';
+import { FileSource } from '../../lib/sources/FileSource';
+import { bookId, breadcrumbNode, graph, pageUrl, seriesNode, seriesReadingOrder } from '../../lib/jsonld';
+import { isFutureRelease } from '../../lib/date';
+
+export async function getStaticPaths() {
+  const source = new FileSource();
+  return (await source.getSeries()).map((series) => ({ params: { slug: series.slug }, props: { series } }));
+}
+
+const { series } = Astro.props;
+const source = new FileSource();
+const [books, authors] = await Promise.all([source.getBooks(), source.getAuthors()]);
+const members = books.filter((b) => b.seriesSlug === series.slug).sort((a,b) => (a.seriesPosition ?? 999) - (b.seriesPosition ?? 999));
+const seriesAuthors = authors.filter((a) => series.authorSlugs.includes(a.slug));
+const memberStubs = members.map((b) => ({ id: bookId(b.slug), name: b.title }));
+const readingMembers = members.map((b) => ({ id: bookId(b.slug), name: b.title, position: b.seriesPosition }));
+const breadcrumbs = breadcrumbNode([
+  { name: 'The Sentience Saga', url: pageUrl('/') },
+  { name: 'Series', url: pageUrl('/series') },
+  { name: series.name },
+]);
+---
+<Base title={`${series.name} | The Sentience Saga`} description={series.description} image={series.cover} imageAlt={series.cover ? `${series.name} series artwork` : undefined}>
+  <Fragment slot="breadcrumbs"><a href="/">The Sentience Saga</a> / <a href="/series">Series</a> / {series.name}</Fragment>
+  <JsonLd graph={graph([seriesNode(series, memberStubs, seriesAuthors), seriesReadingOrder(series, readingMembers), breadcrumbs])} />
+  <p class="eyebrow">AN ERA OF THE SENTIENCE SAGA</p>
+  <h1>{series.name}</h1>
+  <p class="lede">{series.description}</p>
+  {series.authorSlugs.length > 0 && <p class="byline">By {seriesAuthors.map((a) => a.name).join(' & ')}</p>}
+
+  {members.length > 0 ? (
+    <section aria-labelledby="reading-order">
+      <h2 id="reading-order">Reading order</h2>
+      <div class="book-grid">
+        {members.map((book) => <article class="card">
+          {book.cover && <a href={`/books/${book.slug}`}><img class="cover" src={book.cover} alt={`Cover of ${book.title}`} /></a>}
+          <p class="book-number">{book.seriesPosition === 0 ? 'Prequel' : `Book ${book.seriesPosition}`}</p>
+          <h3><a href={`/books/${book.slug}`}>{book.title}</a>{isFutureRelease(book.datePublished) && <span class="preorder-badge">Pre-order</span>}</h3>
+          <p class="book-blurb">{book.description}</p>
+        </article>)}
+      </div>
+    </section>
+  ) : <p class="timeline-note">Book pages are being added to this era now.</p>}
+</Base>

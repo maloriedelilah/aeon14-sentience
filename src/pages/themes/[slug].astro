@@ -1,0 +1,43 @@
+---
+import Base from '../../layouts/Base.astro';
+import JsonLd from '../../components/JsonLd.astro';
+import { FileSource } from '../../lib/sources/FileSource';
+import type { Book } from '../../lib/ContentSource';
+import { bookId, breadcrumbNode, graph, hubId, hubPageExtra, pageUrl } from '../../lib/jsonld';
+
+export async function getStaticPaths() {
+  const source = new FileSource();
+  return (await source.getHubs()).map((hub) => ({ params: { slug: hub.slug }, props: { hub } }));
+}
+
+const { hub } = Astro.props;
+const source = new FileSource();
+const books = await source.getBooks();
+const members = hub.bookSlugs
+  .map((slug: string) => books.find((b) => b.slug === slug))
+  .filter((book): book is Book => Boolean(book));
+const extra = hubPageExtra(hub, members.map((b) => ({ id: bookId(b.slug), name: b.title })));
+const breadcrumbs = breadcrumbNode([
+  { name: 'The Sentience Saga', url: pageUrl('/') },
+  { name: 'Themes', url: pageUrl('/themes') },
+  { name: hub.name },
+]);
+---
+<Base title={`${hub.name} | The Sentience Saga`} description={hub.description} pageType="CollectionPage" pageId={hubId(hub.slug)} pageExtra={extra}>
+  <Fragment slot="breadcrumbs"><a href="/">The Sentience Saga</a> / <a href="/themes">Themes</a> / {hub.name}</Fragment>
+  <JsonLd graph={graph([breadcrumbs])} />
+  <p class="eyebrow">A SENTIENCE SAGA THEME</p>
+  <h1>{hub.name}</h1>
+  <p class="lede">{hub.description}</p>
+  <div class="theme-cloud">{hub.about.map((item) => <span class="theme-pill">{item.term}</span>)}</div>
+  <section aria-labelledby="books-in-theme">
+    <h2 id="books-in-theme">Books exploring this idea</h2>
+    <div class="book-grid">
+      {members.map((book) => <article class="card">
+        <a href={`/books/${book.slug}`}><img class="cover" src={book.cover} alt={`Cover of ${book.title}`} /></a>
+        <h3><a href={`/books/${book.slug}`}>{book.title}</a></h3>
+        <p class="book-blurb">{book.description}</p>
+      </article>)}
+    </div>
+  </section>
+</Base>

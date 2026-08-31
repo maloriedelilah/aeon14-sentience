@@ -1,0 +1,25 @@
+---
+import Base from '../../layouts/Base.astro';
+import { FileSource } from '../../lib/sources/FileSource';
+const source = new FileSource();
+const [seriesList, books] = await Promise.all([source.getSeries(), source.getBooks()]);
+const order = ['sentience-gradient', 'sentience-wars', 'enfield-genesis'];
+seriesList.sort((a,b) => order.indexOf(a.slug) - order.indexOf(b.slug));
+---
+<Base title="The Three Eras | The Sentience Saga" description="Explore The Sentience Gradient, Sentience Wars, and Enfield Genesis — three eras in the history of machine consciousness in Aeon 14.">
+  <Fragment slot="breadcrumbs"><a href="/">The Sentience Saga</a> / Series</Fragment>
+  <p class="eyebrow">THREE ERAS · ONE STORY</p>
+  <h1>The Sentience Saga</h1>
+  <p class="lede">From the first illegal emergence to a war for personhood and the spread of AI freedom into the stars, these series form one widening history.</p>
+  <div class="series-grid">
+    {seriesList.map((series) => {
+      const count = books.filter((b) => b.seriesSlug === series.slug).length;
+      return <article class="card series-card">
+        <h2><a href={`/series/${series.slug}`}>{series.name}</a></h2>
+        <p class="series-description">{series.description}</p>
+        {count > 0 && <p class="book-number">{count} {count === 1 ? 'book' : 'books'} currently catalogued</p>}
+        <a class="era-link" href={`/series/${series.slug}`}>Explore the era →</a>
+      </article>;
+    })}
+  </div>
+</Base>

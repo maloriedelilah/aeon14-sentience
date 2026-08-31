@@ -1,0 +1,27 @@
+---
+import Base from '../layouts/Base.astro';
+import JsonLd from '../components/JsonLd.astro';
+import { FileSource } from '../lib/sources/FileSource';
+import { authorNode, graph } from '../lib/jsonld';
+
+const source = new FileSource();
+const authors = await source.getAuthors();
+const primary = authors[0];
+---
+<Base title="About the Authors | The Sentience Saga" description="Meet M. D. Cooper and the collaborators behind The Sentience Gradient, Sentience Wars, and Enfield Genesis." type="profile" image={primary?.photo} imageAlt={primary?.photo ? `Photo of ${primary.name}` : undefined}>
+  <Fragment slot="breadcrumbs"><a href="/">The Sentience Saga</a> / About</Fragment>
+  <JsonLd graph={graph(authors.map(authorNode))} />
+  <p class="eyebrow">THE AUTHORS</p>
+  <h1>Behind the Sentience Saga</h1>
+  <p class="lede">Aeon 14 is the future-history universe created by M. D. Cooper. The Sentience Saga crosses three series, including collaborations with James S. Aaron and L. L. Richman.</p>
+  {authors.map((author) => (
+    <section id={author.slug} class="card author-card">
+      {author.photo && <img class="author-photo" src={author.photo} alt={author.name} />}
+      <div class="author-card-body">
+        <h2>{author.name}</h2>
+        <p>{author.bio}</p>
+        {author.sameAs.length > 0 && <p>{author.sameAs.map((url, i) => <><a href={url} target="_blank" rel="noopener noreferrer">Profile</a>{i < author.sameAs.length - 1 ? ' · ' : ''}</>)}</p>}
+      </div>
+    </section>
+  ))}
+</Base>

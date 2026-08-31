@@ -1,0 +1,15 @@
+---
+import Base from '../../layouts/Base.astro';
+import { FileSource } from '../../lib/sources/FileSource';
+const source = new FileSource();
+const hubs = await source.getHubs();
+---
+<Base title="Themes | The Sentience Saga" description="Explore the Sentience Saga by ideas: AI emergence, personhood, ownership, liberation, partnership, and coexistence.">
+  <Fragment slot="breadcrumbs"><a href="/">The Sentience Saga</a> / Themes</Fragment>
+  <p class="eyebrow">THE QUESTIONS BENEATH THE STORY</p>
+  <h1>Explore by theme</h1>
+  <p class="lede">These ideas cross centuries and series. Follow the question that interests you and see how it changes as machine consciousness becomes part of civilization.</p>
+  {hubs.length > 0 ? <div class="series-grid">
+    {hubs.map((hub) => <article class="card series-card"><h2><a href={`/themes/${hub.slug}`}>{hub.name}</a></h2><p class="series-description">{hub.description}</p><a class="era-link" href={`/themes/${hub.slug}`}>Follow the theme →</a></article>)}
+  </div> : <p class="timeline-note">Theme collections are being populated now.</p>}
+</Base>

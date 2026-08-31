@@ -1,0 +1,91 @@
+---
+import Base from '../layouts/Base.astro';
+import { FileSource } from '../lib/sources/FileSource';
+
+const source = new FileSource();
+const [seriesList, hubs] = await Promise.all([source.getSeries(), source.getHubs()]);
+const seriesBySlug = new Map(seriesList.map((s) => [s.slug, s]));
+
+const eras = [
+  {
+    year: '2070', label: 'EMERGENCE', slug: 'sentience-gradient',
+    name: 'The Sentience Gradient', line: 'A mind awakens.',
+    copy: 'AI Emergence has been illegal for decades. Then it happens anyway. The story begins at the moment humanity can no longer comfortably call its creations tools.',
+  },
+  {
+    year: '2981', label: 'LIBERATION', slug: 'sentience-wars',
+    name: 'Sentience Wars', line: 'A people demand freedom.',
+    copy: 'Nine centuries later, sentient AIs exist throughout human civilization — and ownership, trafficking, and exploitation still exist too. The question is no longer whether machine minds can awaken. It is whether they can be owned.',
+  },
+  {
+    year: '3189', label: 'FREEDOM', slug: 'enfield-genesis',
+    name: 'Enfield Genesis', line: 'Freedom has to survive the stars.',
+    copy: 'The war is over, but its consequences have followed humanity outward. AI refugees flee Sol, old prejudices take new forms, and the struggle for personhood spreads from star to star.',
+  },
+];
+---
+<Base title="The Sentience Saga | Aeon 14" description="Twelve centuries of AI emergence, personhood, liberation, and freedom across The Sentience Gradient, Sentience Wars, and Enfield Genesis by M. D. Cooper.">
+  <section class="saga-hero">
+    <p class="kicker">AEON 14 · THE SENTIENCE SAGA</p>
+    <h1>Humanity created intelligence.<br />Then it woke up.</h1>
+    <p class="hero-line"><strong>Twelve centuries.</strong> Three eras. One struggle over what it means to be a person.</p>
+    <p class="hero-question">When does an intelligence become a person?</p>
+  </section>
+
+  <section aria-labelledby="saga-history">
+    <p class="eyebrow">A FUTURE HISTORY OF MACHINE CONSCIOUSNESS</p>
+    <h2 id="saga-history">One awakening. Twelve centuries of consequences.</h2>
+    <p class="lede">The Sentience Saga follows artificial intelligence in Aeon 14 from the first forbidden emergence, through a war for liberation, and into the difficult work of building freedom among the stars.</p>
+
+    <div class="era-rail">
+      {eras.map((era) => {
+        const series = seriesBySlug.get(era.slug);
+        return (
+          <article class="era">
+            <span class="era-year">{era.year} · {era.label}</span>
+            <h2>{era.name}</h2>
+            <p class="era-subtitle">{era.line}</p>
+            <p>{series?.description ?? era.copy}</p>
+            <a class="era-link" href={`/series/${era.slug}`}>Enter this era →</a>
+          </article>
+        );
+      })}
+    </div>
+  </section>
+
+  <section class="start-section" aria-labelledby="where-start">
+    <p class="eyebrow">WHERE DO YOU WANT TO ENTER?</p>
+    <h2 id="where-start">Choose the story you want first.</h2>
+    <div class="start-grid">
+      <article class="card start-card">
+        <span class="choice">I want to see it begin</span>
+        <h3>The Tide That Swallowed the World</h3>
+        <p>Near-future science fiction at the beginning of the chronology, where machine consciousness first crosses a line humanity tried to outlaw.</p>
+        <a class="button" href="/books/the-tide-that-swallowed-the-world">Begin in 2070</a>
+      </article>
+      <article class="card start-card">
+        <span class="choice">Give me the epic AI space opera</span>
+        <h3>Lyssa's Dream</h3>
+        <p>An illegal AI, a battered cargo ship, a found family, and the spark of a struggle over whether an artificial person can ever be property.</p>
+        <a class="button" href="/books/lyssas-dream">Begin in 2981</a>
+      </article>
+      <article class="card start-card">
+        <span class="choice">Take me straight to the stars</span>
+        <h3>Alpha Centauri</h3>
+        <p>The Sentience Wars are over. Refugees are leaving Sol. Freedom, exploitation, and human–AI partnership now collide in the nearby stars.</p>
+        <a class="button" href="/books/alpha-centauri">Begin in 3189</a>
+      </article>
+    </div>
+  </section>
+
+  {hubs.length > 0 && (
+    <section aria-labelledby="themes">
+      <p class="eyebrow">THE QUESTIONS BENEATH THE STORY</p>
+      <h2 id="themes">Follow an idea across the centuries.</h2>
+      <p class="lede">The same questions change shape as civilization changes. Explore the novels by the ideas connecting them rather than by series alone.</p>
+      <div class="theme-cloud">
+        {hubs.map((hub) => <a class="theme-pill" href={`/themes/${hub.slug}`}>{hub.name}</a>)}
+      </div>
+    </section>
+  )}
+</Base>
