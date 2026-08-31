@@ -23,7 +23,7 @@ const breadcrumbs = breadcrumbNode([
   { name: hub.name },
 ]);
 ---
-<Base title={`${hub.name} | The Sentience Saga`} description={hub.description} pageType="CollectionPage" pageId={hubId(hub.slug)} pageExtra={extra}>
+<Base title={`${hub.name} | The Sentience Saga`} description={hub.description} pageType="CollectionPage" pageId={hubId(hub.slug)} pageName={hub.name} pageExtra={extra}>
   <Fragment slot="breadcrumbs"><a href="/">The Sentience Saga</a> / <a href="/themes">Themes</a> / {hub.name}</Fragment>
   <JsonLd graph={graph([breadcrumbs])} />
   <p class="eyebrow">A SENTIENCE SAGA THEME</p>
