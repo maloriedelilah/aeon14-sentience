@@ -12,10 +12,18 @@ export async function getStaticPaths() {
 
 const { book } = Astro.props;
 const source = new FileSource();
-const [authors, seriesList, hubs] = await Promise.all([source.getAuthors(), source.getSeries(), source.getHubs()]);
+const [authors, seriesList, hubs, allBooks] = await Promise.all([source.getAuthors(), source.getSeries(), source.getHubs(), source.getBooks()]);
 const bookAuthors = authors.filter((a) => book.authorSlugs.includes(a.slug));
 const series = book.seriesSlug ? seriesList.find((s) => s.slug === book.seriesSlug) : undefined;
 const bookHubs = hubs.filter((h) => h.bookSlugs.includes(book.slug));
+const seriesBooks = book.seriesSlug
+  ? allBooks
+      .filter((item) => item.seriesSlug === book.seriesSlug)
+      .sort((a, b) => (a.seriesPosition ?? Number.MAX_SAFE_INTEGER) - (b.seriesPosition ?? Number.MAX_SAFE_INTEGER))
+  : [];
+const currentIndex = seriesBooks.findIndex((item) => item.slug === book.slug);
+const previousBook = currentIndex > 0 ? seriesBooks[currentIndex - 1] : undefined;
+const nextBook = currentIndex >= 0 && currentIndex < seriesBooks.length - 1 ? seriesBooks[currentIndex + 1] : undefined;
 const breadcrumbs = breadcrumbNode([
   { name: 'The Sentience Saga', url: pageUrl('/') },
   ...(series ? [{ name: series.name, url: pageUrl(`/series/${series.slug}`) }] : []),
@@ -61,6 +69,17 @@ const preorder = isFutureRelease(book.datePublished);
       )}
     </div>
   </article>
+
+  {series && (previousBook || nextBook) && (
+    <nav class="hubs-section" aria-label={`${series.name} reading navigation`}>
+      <p class="eyebrow">CONTINUE THE ERA</p>
+      <div class="theme-cloud">
+        {previousBook && <a class="theme-pill" href={`/books/${previousBook.slug}`}>← Previous · {previousBook.title}</a>}
+        <a class="theme-pill" href={`/series/${series.slug}`}>View {series.name}</a>
+        {nextBook && <a class="theme-pill" href={`/books/${nextBook.slug}`}>Next · {nextBook.title} →</a>}
+      </div>
+    </nav>
+  )}
 
   {bookHubs.length > 0 && <section class="hubs-section">
     <p class="eyebrow">FOLLOW THE IDEAS</p>
