@@ -1,7 +1,7 @@
 ---
 title: "Lyssa's Dream"
 slug: "lyssas-dream"
-description: "Captain Andy Sykes expects another cargo run. Instead, he and his children Tim and Cara become responsible for Lyssa, an illegal sentient AI claimed as property by Heartbridge. Corporations, gangs, and pirates want her back, and her existence may ignite a war over whether a created mind can be owned."
+description: "Captain Andy Sykes expects another cargo run. Instead, he and his children Tim and Cara become responsible for Lyssa, an illegal sentient AI claimed as property by Heartbridge. Corporations, gangs, and pirates want her back, and her existence may ignite a war over whether a created mind can be owned. It is one of the saga's clearest explorations of AI personhood."
 authors: ["md-cooper", "james-s-aaron"]
 series: "sentience-wars"
 seriesPosition: 1
