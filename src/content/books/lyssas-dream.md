@@ -11,12 +11,12 @@ storyDate: "2981-07-24"
 language: "en"
 genres: ["Science Fiction", "Hard Science Fiction", "Space Opera", "Artificial Intelligence", "AI Rights", "Found Family"]
 editions:
-  - format: "ebook"
-    retailer: "Aeon14.com"
-    url: "https://www.aeon14.com/product-page/lyssa-s-dream-sentience-wars-1"
-    price: "5.99"
+  - format: "paperback"
+    isbn: "9781643650760"
+    retailer: "Barnes & Noble"
+    url: "https://www.barnesandnoble.com/w/lyssas-dream-m-d-cooper/1140864449"
+    price: "16.99"
     currency: "USD"
-    sku: "lyssa-s-dream-sentience-wars-1"
 ---
 
 The central entry point to the Sentience Wars and Lyssa's fight to be recognized as a person rather than property.
