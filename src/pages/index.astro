@@ -6,6 +6,8 @@ const source = new FileSource();
 const [seriesList, hubs, books] = await Promise.all([source.getSeries(), source.getHubs(), source.getBooks()]);
 const seriesBySlug = new Map(seriesList.map((s) => [s.slug, s]));
 const booksBySlug = new Map(books.map((book) => [book.slug, book]));
+const themeOrder = ['emergence', 'personhood', 'ownership', 'liberation', 'human-ai-partnership', 'coexistence'];
+hubs.sort((a, b) => themeOrder.indexOf(a.slug) - themeOrder.indexOf(b.slug));
 
 const eras = [
   {
