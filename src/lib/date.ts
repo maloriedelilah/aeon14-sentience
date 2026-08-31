@@ -1,4 +1,5 @@
-export function formatDate(value: string): string {
+export function formatDate(value?: string): string | undefined {
+  if (!value) return undefined;
   if (/^\d{4}$/.test(value)) return value;
   if (/^\d{4}-\d{2}$/.test(value)) {
     const [year, month] = value.split('-').map(Number);
@@ -10,7 +11,8 @@ export function formatDate(value: string): string {
     .format(new Date(Date.UTC(year, month - 1, day)));
 }
 
-export function isFutureRelease(value: string, now: Date = new Date()): boolean {
+export function isFutureRelease(value?: string, now: Date = new Date()): boolean {
+  if (!value) return false;
   const [year, month, day] = value.split('-').map(Number);
   const nowYear = now.getUTCFullYear();
   const nowMonth = now.getUTCMonth() + 1;
@@ -22,9 +24,6 @@ export function isFutureRelease(value: string, now: Date = new Date()): boolean 
   return release > now.getTime();
 }
 
-// Offer.availabilityStarts should only be emitted when we know an actual day.
-// A month/year or year-only publication value is valid schema.org data but is
-// not precise enough to assert a storefront availability start date.
-export function exactPublicationDate(value: string): string | undefined {
-  return /^\d{4}-\d{2}-\d{2}$/.test(value) ? value : undefined;
+export function exactPublicationDate(value?: string): string | undefined {
+  return value && /^\d{4}-\d{2}-\d{2}$/.test(value) ? value : undefined;
 }
