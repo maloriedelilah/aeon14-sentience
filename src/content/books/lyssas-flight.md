@@ -2,6 +2,7 @@
 title: "Lyssa's Flight"
 slug: "lyssas-flight"
 description: "The Sykes family is done running. Andy and Lyssa launch a counterattack while other sentient AIs reach out to Lyssa and a system-wide awakening begins to threaten the fragile balance between Terra, Mars, and the Jovian Combine."
+cover: "https://sentience.aeon14.com/covers/lyssas-flight.webp"
 authors: ["md-cooper", "james-s-aaron"]
 series: "sentience-wars"
 seriesPosition: 3
