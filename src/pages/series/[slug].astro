@@ -3,7 +3,7 @@ import Base from '../../layouts/Base.astro';
 import JsonLd from '../../components/JsonLd.astro';
 import { FileSource } from '../../lib/sources/FileSource';
 import { bookId, breadcrumbNode, graph, pageUrl, seriesNode, seriesReadingOrder } from '../../lib/jsonld';
-import { isFutureRelease } from '../../lib/date';
+import { formatDate, isFutureRelease } from '../../lib/date';
 
 export async function getStaticPaths() {
   const source = new FileSource();
@@ -36,8 +36,18 @@ const breadcrumbs = breadcrumbNode([
       <h2 id="reading-order">Reading order</h2>
       <div class="book-grid">
         {members.map((book) => <article class="card">
-          {book.cover && <a href={`/books/${book.slug}`}><img class="cover" src={book.cover} alt={`Cover of ${book.title}`} /></a>}
-          <p class="book-number">{book.seriesPosition === 0 ? 'Prequel' : `Book ${book.seriesPosition}`}</p>
+          <a href={`/books/${book.slug}`} aria-label={`Open ${book.title}`}>
+            {book.cover ? (
+              <img class="cover" src={book.cover} alt={`Cover of ${book.title}`} />
+            ) : (
+              <div class="cover cover-placeholder" role="img" aria-label={`Cover artwork for ${book.title} pending`}>
+                <span class="cover-placeholder-mark">A14</span>
+                <strong>{book.title}</strong>
+                <span>Cover artwork pending</span>
+              </div>
+            )}
+          </a>
+          <p class="book-number">{book.seriesPosition === 0 ? 'Prequel' : `Book ${book.seriesPosition}`}{book.storyDate ? ` · ${formatDate(book.storyDate)}` : ''}</p>
           <h3><a href={`/books/${book.slug}`}>{book.title}</a>{isFutureRelease(book.datePublished) && <span class="preorder-badge">Pre-order</span>}</h3>
           <p class="book-blurb">{book.description}</p>
         </article>)}
