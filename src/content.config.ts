@@ -21,6 +21,11 @@ const comp = z.object({
   sameAs: z.array(z.string().url()).optional(),
 });
 
+const publicationDate = z.string().regex(
+  /^\d{4}(?:-(?:0[1-9]|1[0-2])(?:-(?:0[1-9]|[12]\d|3[01]))?)?$/,
+  'datePublished must preserve known precision as YYYY, YYYY-MM, or YYYY-MM-DD',
+);
+
 const author = defineCollection({
   loader: glob({ pattern: '**/*.{md,yaml}', base: './src/content/author' }),
   schema: ({ image }) => z.object({
@@ -42,11 +47,16 @@ const books = defineCollection({
     subtitle: z.string().optional(),
     slug: z.string(),
     description: z.string().min(1),
-    cover: image(),
+    // Real covers are preferred, but a verified book record should not be
+    // blocked because an upstream storefront is temporarily hiding the asset.
+    // Remote official cover URLs and local Astro images are both supported.
+    cover: z.union([image(), z.string().url()]).optional(),
     authors: z.array(reference('author')).min(1),
     series: reference('series').optional(),
     seriesPosition: z.number().int().optional(),
-    datePublished: z.coerce.date(),
+    // Preserve the precision the source actually gives us instead of inventing
+    // a day for older books whose public metadata only specifies a year/month.
+    datePublished: publicationDate,
     language: z.string().default('en'),
     genres: z.array(z.string()).default([]),
     editions: z.array(edition).min(1),
