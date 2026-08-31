@@ -22,6 +22,8 @@ const breadcrumbs = breadcrumbNode([
   { name: book.title },
 ]);
 const firstIsbn = book.editions.find((e) => e.isbn)?.isbn;
+const releaseLabel = formatDate(book.datePublished);
+const preorder = isFutureRelease(book.datePublished);
 ---
 <Base title={`${book.title} | The Sentience Saga`} description={book.description} image={book.cover} imageAlt={book.cover ? `Cover of ${book.title}` : undefined} type="book" bookIsbn={firstIsbn} bookReleaseDate={book.datePublished}>
   <Fragment slot="breadcrumbs"><a href="/">The Sentience Saga</a> / {series && <><a href={`/series/${series.slug}`}>{series.name}</a> / </>}{book.title}</Fragment>
@@ -38,21 +40,23 @@ const firstIsbn = book.editions.find((e) => e.isbn)?.isbn;
           <span>Cover artwork pending</span>
         </div>
       )}
-      <p class="release-date">{isFutureRelease(book.datePublished) ? 'Releases' : 'Published'} {formatDate(book.datePublished)}</p>
+      {releaseLabel && <p class="release-date">{preorder ? 'Releases' : 'Published'} {releaseLabel}</p>}
     </div>
     <div class="book-card-body">
       {series && <p class="eyebrow">{series.name}{book.seriesPosition != null ? ` · ${book.seriesPosition === 0 ? 'PREQUEL' : `BOOK ${book.seriesPosition}`}` : ''}</p>}
-      <h1>{book.title}{isFutureRelease(book.datePublished) && <span class="preorder-badge">Pre-order</span>}</h1>
+      <h1>{book.title}{preorder && <span class="preorder-badge">Pre-order</span>}</h1>
       {book.subtitle && <p class="subtitle">{book.subtitle}</p>}
       <p class="byline">By {bookAuthors.map((a) => a.name).join(' & ')}</p>
       <p>{book.description}</p>
 
-      <section class="get-book-section" aria-labelledby="get-book">
-        <h2 id="get-book">{isFutureRelease(book.datePublished) ? 'Pre-order' : 'Get the book'}</h2>
-        <ul class="editions">
-          {book.editions.map((edition) => <li><a class="buy-button" href={edition.url} target="_blank" rel="noopener noreferrer">{edition.retailer} · {edition.format}</a></li>)}
-        </ul>
-      </section>
+      {book.editions.length > 0 && (
+        <section class="get-book-section" aria-labelledby="get-book">
+          <h2 id="get-book">{preorder ? 'Pre-order' : 'Get the book'}</h2>
+          <ul class="editions">
+            {book.editions.map((edition) => <li><a class="buy-button" href={edition.url} target="_blank" rel="noopener noreferrer">{edition.retailer} · {edition.format}</a></li>)}
+          </ul>
+        </section>
+      )}
     </div>
   </article>
 
