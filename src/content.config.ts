@@ -47,19 +47,20 @@ const books = defineCollection({
     subtitle: z.string().optional(),
     slug: z.string(),
     description: z.string().min(1),
-    // Real covers are preferred, but a verified book record should not be
-    // blocked because an upstream storefront is temporarily hiding the asset.
-    // Remote official cover URLs and local Astro images are both supported.
     cover: z.union([image(), z.string().url()]).optional(),
     authors: z.array(reference('author')).min(1),
     series: reference('series').optional(),
     seriesPosition: z.number().int().optional(),
-    // Preserve the precision the source actually gives us instead of inventing
-    // a day for older books whose public metadata only specifies a year/month.
-    datePublished: publicationDate,
+    // Older or very new titles occasionally have trustworthy series/story
+    // metadata before a clean publication date is exposed publicly. Omit it
+    // rather than fabricating one; when present, preserve the source precision.
+    datePublished: publicationDate.optional(),
     language: z.string().default('en'),
     genres: z.array(z.string()).default([]),
-    editions: z.array(edition).min(1),
+    // Commerce enrichment is independent of catalog completeness. A verified
+    // title can ship with zero offers and gain them later as prices/ids are
+    // confirmed. Offers that ARE present remain strict and machine-usable.
+    editions: z.array(edition).default([]),
     comps: z.array(comp).default([]),
   }),
 });
