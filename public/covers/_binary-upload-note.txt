@@ -1,0 +1,1 @@
+Covers uploaded from user-supplied originals; binary assets are stored in public/covers.
