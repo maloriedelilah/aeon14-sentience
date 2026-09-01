@@ -127,7 +127,8 @@ body {
   }
 
   .timeline-stage .timeline-rail {
-    width: min(100% - 1.5rem, 1120px);
+    width: calc(100% - 1.5rem);
+    max-width: 1120px;
   }
 
   .timeline-stage .era {
