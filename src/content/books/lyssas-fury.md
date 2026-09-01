@@ -7,6 +7,7 @@ authors: ["md-cooper", "james-s-aaron"]
 series: "sentience-wars"
 seriesPosition: 9
 datePublished: "2021"
+storyDate: "3011-09-05"
 language: "en"
 genres: ["Science Fiction", "Hard Science Fiction", "Space Opera", "Artificial Intelligence", "AI Rights", "Space Fleet Warfare"]
 ---
