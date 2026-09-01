@@ -2,6 +2,7 @@
 title: "Lyssa's Call"
 slug: "lyssas-call"
 description: "Sentient AIs across Sol answer Alexander's promise of freedom while smugglers move them toward Proteus. Lyssa and the crew of the Sunny Skies become responsible for an entire fleet of weaponized AIs as Heartbridge and the powers of Sol maneuver toward war."
+cover: "https://sentience.aeon14.com/covers/lyssas-call.webp"
 authors: ["md-cooper", "james-s-aaron"]
 series: "sentience-wars"
 seriesPosition: 4

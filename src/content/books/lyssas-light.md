@@ -2,6 +2,7 @@
 title: "Lyssa's Light"
 slug: "lyssas-light"
 description: "After decades of failed diplomacy with the Psion AIs on Ceres, Lyssa watches for their next move. Marsian special forces, Sol data hackers, and Cruithne smugglers converge on Vesta as a long standoff between humans and AIs edges toward open war."
+cover: "https://sentience.aeon14.com/covers/lyssas-light.webp"
 authors: ["md-cooper", "james-s-aaron"]
 series: "sentience-wars"
 seriesPosition: 6
