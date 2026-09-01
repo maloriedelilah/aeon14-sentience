@@ -28,6 +28,7 @@ export const siteConfig = {
     { label: 'Series', href: '/series' },
     { label: 'Themes', href: '/themes' },
     { label: 'About', href: '/about' },
+    { label: 'Contact', href: '/contact' },
   ] as NavItem[],
 
   footer: {
@@ -36,7 +37,7 @@ export const siteConfig = {
   },
 
   leads: {
-    provider: 'mailerlite' as 'mailerlite' | 'emailoctopus' | (string & {}),
+    provider: 'emailoctopus' as 'mailerlite' | 'emailoctopus' | (string & {}),
     doubleOptIn: true,
     groups: [] as string[],
   },
