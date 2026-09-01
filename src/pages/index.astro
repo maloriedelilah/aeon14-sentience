@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import SubscribeForm from '../components/SubscribeForm.astro';
 import { FileSource } from '../lib/sources/FileSource';
 
 const source = new FileSource();
@@ -115,6 +116,17 @@ const entryPoints = [
       </div>
     </section>
   )}
+
+  <section class="newsletter-section" aria-labelledby="newsletter">
+    <p class="eyebrow">CONTINUE THE JOURNEY</p>
+    <div class="newsletter-panel">
+      <div>
+        <h2 id="newsletter">Stay connected to Aeon 14.</h2>
+        <p class="lede">Get news about new releases, upcoming Sentience stories, and the wider Aeon 14 universe.</p>
+      </div>
+      <SubscribeForm />
+    </div>
+  </section>
 
   <section class="timeline-note" aria-label="About Aeon 14">
     <strong>The Sentience Saga is one interconnected arc within the larger Aeon 14 universe.</strong>
