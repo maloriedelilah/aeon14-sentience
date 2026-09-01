@@ -1,0 +1,26 @@
+.book-grid {
+  align-items: stretch;
+  grid-auto-rows: auto;
+}
+
+.book-grid > .card {
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  min-height: 0;
+  min-width: 0;
+}
+
+.book-grid > .card > a:first-child {
+  display: block;
+  flex: none;
+}
+
+.book-grid > .card h3,
+.book-grid > .card .book-blurb {
+  overflow-wrap: anywhere;
+}
+
+.book-grid > .card .book-blurb {
+  margin-bottom: 0;
+}
