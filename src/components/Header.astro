@@ -3,14 +3,16 @@ import { siteConfig } from '../config';
 interface Props { authorName: string; }
 const { authorName } = Astro.props as Props;
 const { logo, layout } = siteConfig.header;
+const contactEnabled = Boolean(import.meta.env.TURNSTILE_SITE_KEY);
+const navItems = contactEnabled ? siteConfig.nav : siteConfig.nav.filter((item) => item.href !== '/contact');
 ---
 <header class={`site-header site-header--${layout}`}>
   <div class="wrap">
     <a class="brand" href="/" aria-label={`The Sentience Saga by ${authorName}`}>
       {logo.src ? <img class="brand-logo" src={logo.src} alt={logo.alt ?? 'The Sentience Saga'} /> : <span class="wordmark">THE SENTIENCE SAGA</span>}
     </a>
-    {siteConfig.nav.length > 0 && <nav class="site-nav" aria-label="Primary">
-      {siteConfig.nav.map((item) => <a href={item.href}>{item.label}</a>)}
+    {navItems.length > 0 && <nav class="site-nav" aria-label="Primary">
+      {navItems.map((item) => <a href={item.href}>{item.label}</a>)}
     </nav>}
   </div>
 </header>
