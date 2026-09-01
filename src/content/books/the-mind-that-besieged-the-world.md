@@ -7,6 +7,7 @@ authors: ["md-cooper"]
 series: "sentience-gradient"
 seriesPosition: 2
 datePublished: "2026-10"
+storyDate: "2070-04-13"
 language: "en"
 genres: ["Science Fiction", "Near-Future Science Fiction", "Artificial Intelligence", "AI Sentience", "AI Rights"]
 ---
