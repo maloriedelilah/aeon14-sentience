@@ -24,3 +24,113 @@
 .book-grid > .card .book-blurb {
   margin-bottom: 0;
 }
+
+/* Sentience Saga visual layer: all art stays in the fork's override slot. */
+body {
+  background-image:
+    linear-gradient(rgba(7, 16, 24, .94), rgba(7, 16, 24, .96)),
+    url('/images/ambient-sentience.avif');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+.saga-hero {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-top: -3rem;
+  margin-bottom: 4.5rem;
+  min-height: 76vh;
+  padding: clamp(5rem, 10vw, 8.5rem) max(1.25rem, calc((100vw - 1120px) / 2 + 1.25rem));
+  background-image:
+    linear-gradient(180deg, rgba(7, 16, 24, .46) 0%, rgba(7, 16, 24, .14) 38%, rgba(7, 16, 24, .58) 78%, rgba(7, 16, 24, .98) 100%),
+    linear-gradient(90deg, rgba(7, 16, 24, .30), rgba(7, 16, 24, .08) 48%, rgba(7, 16, 24, .20)),
+    url('/images/hero-sentience.avif');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  border-bottom: 1px solid rgba(89, 225, 247, .18);
+  box-shadow: inset 0 -40px 70px rgba(7, 16, 24, .75);
+  overflow: hidden;
+}
+
+.saga-hero > * {
+  position: relative;
+  z-index: 1;
+  text-shadow: 0 2px 24px rgba(0, 0, 0, .78);
+}
+
+.saga-hero h1 {
+  filter: drop-shadow(0 10px 28px rgba(0, 0, 0, .5));
+}
+
+.timeline-stage {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-block: 2.5rem 3.5rem;
+  padding-block: clamp(2.5rem, 5vw, 4.5rem);
+  background-image:
+    linear-gradient(180deg, rgba(7, 16, 24, .82), rgba(7, 16, 24, .52) 46%, rgba(7, 16, 24, .84)),
+    url('/images/timeline-sentience.avif');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  border-block: 1px solid rgba(89, 225, 247, .16);
+  box-shadow: inset 0 30px 70px rgba(7, 16, 24, .55), inset 0 -30px 70px rgba(7, 16, 24, .55);
+}
+
+.timeline-stage .timeline-rail {
+  width: min(1120px, calc(100% - 2.5rem));
+  margin-inline: auto;
+}
+
+.timeline-stage .era {
+  padding: 1.15rem 1.3rem;
+  border: 1px solid rgba(89, 225, 247, .15);
+  border-radius: 16px;
+  background: linear-gradient(145deg, rgba(7, 16, 24, .76), rgba(16, 29, 41, .62));
+  backdrop-filter: blur(4px);
+  box-shadow: 0 16px 42px rgba(0, 0, 0, .18);
+}
+
+.timeline-stage .era h2 a {
+  text-shadow: 0 2px 18px rgba(0, 0, 0, .65);
+}
+
+.newsletter-panel {
+  background-image:
+    linear-gradient(145deg, rgba(16, 29, 41, .94), rgba(7, 16, 24, .92)),
+    url('/images/ambient-sentience.avif');
+  background-size: cover;
+  background-position: center;
+}
+
+@media (max-width: 760px), (prefers-reduced-motion: reduce) {
+  body,
+  .saga-hero,
+  .timeline-stage {
+    background-attachment: scroll;
+  }
+}
+
+@media (max-width: 760px) {
+  .saga-hero {
+    width: 100vw;
+    margin-bottom: 3rem;
+    min-height: 62vh;
+    padding: 4.5rem 1.25rem 5.5rem;
+    background-position: 58% center;
+  }
+
+  .timeline-stage {
+    padding-block: 2rem;
+  }
+
+  .timeline-stage .timeline-rail {
+    width: min(100% - 1.5rem, 1120px);
+  }
+
+  .timeline-stage .era {
+    padding: 1rem;
+  }
+}

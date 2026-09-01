@@ -38,18 +38,20 @@ const pageExtra = {
   <h1>The Sentience Timeline</h1>
   <p class="lede">Read the story as future history: from the first hidden minds of 2070, through the Sentience Wars, and outward into the nearby stars after liberation.</p>
 
-  <div class="era-rail">
-    {datedBooks.map((book) => {
-      const series = book.seriesSlug ? seriesBySlug.get(book.seriesSlug) : undefined;
-      return (
-        <article class="era">
-          <span class="era-year">{formatDate(book.storyDate!)}{series ? ` · ${series.name}` : ''}</span>
-          <h2><a href={`/books/${book.slug}`}>{book.title}</a></h2>
-          <p>{book.description}</p>
-          <a class="era-link" href={`/books/${book.slug}`}>Enter this moment →</a>
-        </article>
-      );
-    })}
+  <div class="timeline-stage">
+    <div class="era-rail timeline-rail">
+      {datedBooks.map((book) => {
+        const series = book.seriesSlug ? seriesBySlug.get(book.seriesSlug) : undefined;
+        return (
+          <article class="era">
+            <span class="era-year">{formatDate(book.storyDate!)}{series ? ` · ${series.name}` : ''}</span>
+            <h2><a href={`/books/${book.slug}`}>{book.title}</a></h2>
+            <p>{book.description}</p>
+            <a class="era-link" href={`/books/${book.slug}`}>Enter this moment →</a>
+          </article>
+        );
+      })}
+    </div>
   </div>
 
   {undatedBooks.length > 0 && (
